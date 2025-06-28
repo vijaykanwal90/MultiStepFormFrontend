@@ -20,6 +20,7 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
     const usernameRegex = /^[^\s]{4,20}$/;
     const passwordRegex = /^(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
 
+    // Frontend validations
     if (!profilePhoto) return setError("Profile photo is required");
     if (!usernameRegex.test(userName)) return setError("Username must be 4-20 characters with no spaces");
     if (newPassword && !passwordRegex.test(newPassword)) {
@@ -28,14 +29,10 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
 
     const selectedDate = new Date(dob);
     const now = new Date();
-    if (dob && selectedDate > now) {
-      return setError("Date of birth cannot be in the future");
-    }
+    if (dob && selectedDate > now) return setError("Date of birth cannot be in the future");
+    if (!gender) return setError("Please select a gender");
 
-    if (!gender) {
-      return setError("Please select a gender");
-    }
-
+    // Backend validation
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
@@ -51,8 +48,9 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
         setError(res.data.message || "Validation failed");
       }
     } catch (err) {
-      console.error(err);
-      setError("Server error during validation");
+      console.error("Validation error:", err);
+      const backendMessage = err?.data?.message || "Server error during validation";
+      setError("message" ,backendMessage);
     }
   };
 
@@ -61,6 +59,8 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
     if (file && (file.type === "image/png" || file.type === "image/jpeg")) {
       updateField("profilePhoto", file);
       setPreview(URL.createObjectURL(file));
+    } else {
+      setError("Only JPG and PNG files are allowed.");
     }
   };
 
@@ -110,7 +110,9 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
             <input
               type={showCurrentPassword ? "text" : "password"}
               placeholder="Current Password (optional)"
-              className="w-full p-2 border rounded pr-10"
+              className={`w-full p-2 border rounded pr-10 ${
+                error.toLowerCase().includes("password") ? "border-red-500" : ""
+              }`}
               value={formData.currentPassword}
               onChange={(e) => updateField("currentPassword", e.target.value)}
             />
