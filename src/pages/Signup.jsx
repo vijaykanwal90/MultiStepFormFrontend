@@ -94,7 +94,7 @@ const Signup = () => {
             </div>
           </div>
 
-          <button className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-lg font-semibold transition duration-200"
+          <button className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-lg font-semibold transition duration-200 cursor-pointer"
           onClick={handleSubmit}>
             Sign Up
           </button>
