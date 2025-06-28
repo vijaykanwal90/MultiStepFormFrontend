@@ -53,7 +53,7 @@ const ProfileEdit = () => {
 
         setFormData((prev) => ({
           ...prev,
-          profilePhoto: data.profile || null,               // Mapped
+          profilePhoto: data.profilePhoto || null,               // Mapped
           userName: data.userName || "",
           email: data.email || "",
           profession: data.profession || "",

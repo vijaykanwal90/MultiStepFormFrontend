@@ -24,7 +24,7 @@ const Signup = () => {
         e.preventDefault()
     }
     try{
-      console.log(formData)
+      
         const res = await axios.post(`${BASE_URL}/user/signup`, { formData }, {
             headers: {
               'Content-Type': 'application/json',
@@ -33,9 +33,9 @@ const Signup = () => {
 
 
         const { token } = res.data;
-        console.log(res.status)
+    
         localStorage.setItem('token', token);
-        // toast.success('Logged in successfully');
+      
         if (res.status === 201) {
             navigate('/profileedit');
         }
@@ -45,7 +45,7 @@ const Signup = () => {
     }
   }
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4">
+    <div className="min-h-screen flex items-center justify-center  px-4">
       <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md border">
         <h2 className="text-3xl font-bold text-center text-indigo-700 mb-6">Sign Up</h2>
 

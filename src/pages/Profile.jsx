@@ -64,7 +64,7 @@ const Profile = () => {
       <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200">
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
           <img
-            src={user.profile || "/default-avatar.png"}
+            src={user.profilePhoto || "/default-avatar.png"}
             alt="Profile"
             className="w-32 h-32 rounded-full object-cover border"
           />

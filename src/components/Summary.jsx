@@ -84,7 +84,11 @@ const Summary = ({ formData, prevStep }) => {
           <div className="mt-4">
             <span className="block font-medium text-gray-700 mb-2">Profile Photo</span>
             <img
-              src={formData.profilePhoto}
+             src={
+              typeof formData.profilePhoto === "string"
+                ? formData.profilePhoto
+                : URL.createObjectURL(formData.profilePhoto)
+            }
               alt="Profile Preview"
               className="w-24 h-24 rounded-full object-cover border"
             />

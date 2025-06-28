@@ -16,7 +16,7 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
   const today = new Date().toISOString().split("T")[0];
 
   const validateAndNext = async () => {
-    const { userName, profilePhoto, newPassword, currentPassword, dob } = formData;
+    const { userName, profilePhoto, newPassword, currentPassword, dob, gender } = formData;
     const usernameRegex = /^[^\s]{4,20}$/;
     const passwordRegex = /^(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
 
@@ -26,11 +26,14 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
       return setError("Password must contain at least one symbol and one number");
     }
 
-    // ✅ Check if DOB is not in the future
     const selectedDate = new Date(dob);
     const now = new Date();
     if (dob && selectedDate > now) {
       return setError("Date of birth cannot be in the future");
+    }
+
+    if (!gender) {
+      return setError("Please select a gender");
     }
 
     try {
@@ -108,6 +111,7 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
               type={showCurrentPassword ? "text" : "password"}
               placeholder="Current Password (optional)"
               className="w-full p-2 border rounded pr-10"
+              value={formData.currentPassword}
               onChange={(e) => updateField("currentPassword", e.target.value)}
             />
             <span
