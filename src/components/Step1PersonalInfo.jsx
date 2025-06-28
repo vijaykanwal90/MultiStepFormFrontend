@@ -3,6 +3,7 @@ import axios from "axios";
 import { FaRegEyeSlash } from 'react-icons/fa';
 import { IoEyeOutline } from 'react-icons/io5';
 import { BASE_URL } from "../constants/constant";
+
 const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
   const [error, setError] = useState("");
   const [preview, setPreview] = useState(
@@ -15,13 +16,22 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
   const today = new Date().toISOString().split("T")[0];
 
   const validateAndNext = async () => {
-    const { userName, profilePhoto, newPassword, currentPassword } = formData;
+    const { userName, profilePhoto, newPassword, currentPassword, dob } = formData;
     const usernameRegex = /^[^\s]{4,20}$/;
     const passwordRegex = /^(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
 
     if (!profilePhoto) return setError("Profile photo is required");
     if (!usernameRegex.test(userName)) return setError("Username must be 4-20 characters with no spaces");
-    if (newPassword && !passwordRegex.test(newPassword)) return setError("Password must contain a symbol and a number");
+    if (newPassword && !passwordRegex.test(newPassword)) {
+      return setError("Password must contain at least one symbol and one number");
+    }
+
+    // ✅ Check if DOB is not in the future
+    const selectedDate = new Date(dob);
+    const now = new Date();
+    if (dob && selectedDate > now) {
+      return setError("Date of birth cannot be in the future");
+    }
 
     try {
       const token = localStorage.getItem("token");
@@ -180,7 +190,7 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
         <div className="pt-4">
           <button
             onClick={validateAndNext}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded transition duration-200 w-full sm:w-auto"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded transition duration-200 w-full sm:w-auto cursor-pointer"
           >
             Next
           </button>

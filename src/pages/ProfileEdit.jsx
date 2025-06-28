@@ -66,7 +66,7 @@ const ProfileEdit = () => {
           newsletter: data.newsLetter ?? true,             // Mapped
         }));
       } catch (err) {
-        console.error("❌ Failed to fetch profile:", err);
+        console.error(" Failed to fetch profile:", err);
       } finally {
         setLoading(false);
       }
