@@ -4,6 +4,7 @@ import Step2ProfessionalDetails from "../components/Step2ProfessionalDetails";
 import Step3Preferences from "../components/Step3Preferences";
 import Summary from "../components/Summary";
 import axios from "axios";
+import { BASE_URL } from "../constants/constant"; 
 
 const ProfileEdit = () => {
   const [step, setStep] = useState(1);
@@ -40,7 +41,7 @@ const ProfileEdit = () => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:3001/api/user/profile", {
+        const res = await axios.get(`${BASE_URL}/user/profile`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,

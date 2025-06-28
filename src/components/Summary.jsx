@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../constants/constant";
 const Summary = ({ formData, prevStep }) => {
   const navigate = useNavigate();
   const handleSubmit = async () => {
@@ -31,7 +32,7 @@ const Summary = ({ formData, prevStep }) => {
       }));
 
       const res = await axios.patch(
-        "http://localhost:3001/api/user/profileEdit",
+        `${BASE_URL}/user/profileEdit`,
         form,
         {
           headers: {

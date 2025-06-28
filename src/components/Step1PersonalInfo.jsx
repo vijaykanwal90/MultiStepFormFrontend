@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { FaRegEyeSlash } from 'react-icons/fa';
 import { IoEyeOutline } from 'react-icons/io5';
-
+import { BASE_URL } from "../constants/constant";
 const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
   const [error, setError] = useState("");
   const [preview, setPreview] = useState(
@@ -26,7 +26,7 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "http://localhost:3001/api/user/validate-personalData",
+        `${BASE_URL}/user/validate-personalData`,
         { userName, currentPassword, newPassword },
         { headers: { Authorization: `Bearer ${token}` } }
       );

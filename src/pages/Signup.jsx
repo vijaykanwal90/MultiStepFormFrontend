@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaRegEyeSlash } from 'react-icons/fa';
 import { IoEyeOutline } from 'react-icons/io5';
 import axios from 'axios';
+import { BASE_URL } from '../constants/constant';
 const Signup = () => {
   const [formData, setFormData] = useState({
     userName: '',
@@ -24,7 +25,7 @@ const Signup = () => {
     }
     try{
       console.log(formData)
-        const res = await axios.post(`http://localhost:3001/api/user/signup`, { formData }, {
+        const res = await axios.post(`${BASE_URL}/user/signup`, { formData }, {
             headers: {
               'Content-Type': 'application/json',
             },

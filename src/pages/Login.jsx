@@ -4,7 +4,7 @@ import { FaRegEyeSlash } from 'react-icons/fa';
 import { IoEyeOutline } from 'react-icons/io5';
 import axios from "axios"
 import { useNavigate } from 'react-router-dom';
-
+import BASE_URL from "../constants/constant"
 const Login = () => {
 
     const [userName,setUserName] = useState('')
@@ -16,7 +16,7 @@ const Login = () => {
         e.preventDefault();
     }
     try{
-        const res = await axios.post(`http://localhost:3001/api/user/login`, { userName, password }, {
+        const res = await axios.post(`${BASE_URL}/user/login`, { userName, password }, {
             headers: {
               'Content-Type': 'application/json',
             },
