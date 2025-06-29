@@ -6,6 +6,7 @@ import { BASE_URL } from "../constants/constant";
 
 const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(
     formData.profilePhoto instanceof File
       ? URL.createObjectURL(formData.profilePhoto)
@@ -20,7 +21,6 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
     const usernameRegex = /^[^\s]{4,20}$/;
     const passwordRegex = /^(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
 
-    // Frontend validations
     if (!profilePhoto) return setError("Profile photo is required");
     if (!usernameRegex.test(userName)) return setError("Username must be 4-20 characters with no spaces");
     if (newPassword && !passwordRegex.test(newPassword)) {
@@ -32,8 +32,8 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
     if (dob && selectedDate > now) return setError("Date of birth cannot be in the future");
     if (!gender) return setError("Please select a gender");
 
-    // Backend validation
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
       const res = await axios.post(
         `${BASE_URL}/user/validate-personalData`,
@@ -49,8 +49,10 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
       }
     } catch (err) {
       console.error("Validation error:", err);
-      const backendMessage = err?.data?.message || "Server error during validation";
-      setError("message" ,backendMessage);
+      const backendMessage = err?.response?.data?.message || "Server error during validation";
+      setError(backendMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -174,7 +176,6 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
           </select>
         </div>
 
-        {/* If gender is "Other", ask for specification */}
         {formData.gender === "Other" && (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Please specify</label>
@@ -189,16 +190,43 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
           </div>
         )}
 
-        {/* Error Message */}
         {error && <p className="text-red-500 text-sm">{error}</p>}
 
         {/* Navigation Button */}
         <div className="pt-4">
           <button
             onClick={validateAndNext}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded transition duration-200 w-full sm:w-auto cursor-pointer"
+            disabled={loading}
+            className={`px-6 py-2 rounded w-full sm:w-auto transition duration-200 text-white ${
+              loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+            }`}
           >
-            Next
+            {loading ? (
+              <span className="flex items-center gap-2 justify-center">
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4l5-5-5-5v4a10 10 0 00-10 10h4z"
+                  ></path>
+                </svg>
+                Validating...
+              </span>
+            ) : (
+              "Next"
+            )}
           </button>
         </div>
       </div>

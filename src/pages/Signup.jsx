@@ -4,6 +4,7 @@ import { FaRegEyeSlash } from 'react-icons/fa';
 import { IoEyeOutline } from 'react-icons/io5';
 import axios from 'axios';
 import { BASE_URL } from '../constants/constant';
+
 const Signup = () => {
   const [formData, setFormData] = useState({
     userName: '',
@@ -12,40 +13,42 @@ const Signup = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
-  const handleSubmit = async(e)=>{
-    if(e?.preventDefault()){
-        e.preventDefault()
-    }
-    try{
-      
-        const res = await axios.post(`${BASE_URL}/user/signup`, { formData }, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
 
+  const handleSubmit = async (e) => {
+    if (e?.preventDefault()) e.preventDefault();
+    setLoading(true);
 
-        const { token } = res.data;
-    
-        localStorage.setItem('token', token);
-      
-        if (res.status === 201) {
-            navigate('/profileedit');
-        }
+    try {
+      const res = await axios.post(`${BASE_URL}/user/signup`, { formData }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const { token } = res.data;
+      localStorage.setItem('token', token);
+
+      if (res.status === 201) {
+        navigate('/profileedit');
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-    catch(error){
-        console.log(error)
-    }
-  }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center  px-4">
+    <div className="min-h-screen flex items-center justify-center px-4">
       <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md border">
         <h2 className="text-3xl font-bold text-center text-indigo-700 mb-6">Sign Up</h2>
 
@@ -57,7 +60,7 @@ const Signup = () => {
               name="userName"
               value={formData.userName}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 "
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Enter your username"
             />
           </div>
@@ -94,9 +97,42 @@ const Signup = () => {
             </div>
           </div>
 
-          <button className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-lg font-semibold transition duration-200 cursor-pointer"
-          onClick={handleSubmit}>
-            Sign Up
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className={`w-full py-2 text-white rounded-lg text-lg font-semibold transition duration-200 ${
+              loading
+                ? 'bg-indigo-400 cursor-not-allowed'
+                : 'bg-indigo-600 hover:bg-indigo-700'
+            }`}
+          >
+            {loading ? (
+              <div className="flex justify-center items-center gap-2">
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8z"
+                  ></path>
+                </svg>
+                Signing Up...
+              </div>
+            ) : (
+              'Sign Up'
+            )}
           </button>
         </div>
 

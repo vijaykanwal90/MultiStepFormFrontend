@@ -30,7 +30,6 @@ const Step3Preferences = ({ formData, updateField, nextStep, prevStep }) => {
     fetchCountries();
   }, []);
 
-  // Fetch states when selectedCountry changes
   useEffect(() => {
     if (!selectedCountry) return;
 

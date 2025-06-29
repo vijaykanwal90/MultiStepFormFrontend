@@ -10,11 +10,12 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     if (e?.preventDefault()) e.preventDefault();
-
+    setLoading(true);
     try {
       const res = await axios.post(
         `${BASE_URL}/user/login`,
@@ -36,11 +37,13 @@ const Login = () => {
       } else {
         setError("Something went wrong. Please try again.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center  px-4">
+    <div className="min-h-screen flex items-center justify-center px-4">
       <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md border">
         <h2 className="text-3xl font-bold text-center text-indigo-700 mb-6">Login</h2>
 
@@ -87,9 +90,37 @@ const Login = () => {
           {/* Submit */}
           <button
             onClick={handleSubmit}
-            className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-lg font-semibold transition duration-200 cursor-pointer"
+            disabled={loading}
+            className={`w-full py-2 rounded-lg text-lg font-semibold transition duration-200 ${
+              loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
+            } text-white`}
           >
-            Login
+            {loading ? (
+              <div className="flex justify-center items-center gap-2">
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4l5-5-5-5v4a10 10 0 00-10 10h4z"
+                  />
+                </svg>
+                Logging in...
+              </div>
+            ) : (
+              'Login'
+            )}
           </button>
         </div>
 
