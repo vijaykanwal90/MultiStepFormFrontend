@@ -58,7 +58,10 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file && (file.type === "image/png" || file.type === "image/jpeg")) {
+      if(file.size > 2 * 1024 * 1024) {
+        return setError("File size exceeds 2MB limit.");
+      }
+    if (file && (file.type === "image/png" || file.type === "image/jpg")) {
       updateField("profilePhoto", file);
       setPreview(URL.createObjectURL(file));
     } else {
