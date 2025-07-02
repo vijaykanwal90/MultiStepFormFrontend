@@ -89,7 +89,7 @@ const Step1PersonalInfo = ({ formData, updateField, nextStep }) => {
             Upload Image
             <input
               type="file"
-              accept="image/png, image/jpeg"
+              accept="image/png, image/jpg"
               onChange={handleImageChange}
               className="hidden"
             />

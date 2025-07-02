@@ -13,6 +13,7 @@ const Summary = ({ formData, prevStep }) => {
       const form = new FormData();
 
       if (formData.profilePhoto) {
+
         form.append("profilePhoto", formData.profilePhoto);
       }
 
@@ -32,7 +33,7 @@ const Summary = ({ formData, prevStep }) => {
         gender: formData.gender,
         dob: formData.dob,
       }));
-
+  
       const res = await axios.patch(`${BASE_URL}/user/profileEdit`, form, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

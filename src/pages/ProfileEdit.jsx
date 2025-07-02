@@ -58,10 +58,13 @@ const ProfileEdit = () => {
           email: data.email || "",
           profession: data.profession || "",
           companyName: data.companyName || "",
-          addressLine1: data.address || "",                
+          addressLine1: data.addressLine1 || "",                
           country: data.country || "",
           state: data.state || "",
           city: data.city || "",
+          gender: data.gender || "",
+          dob: data.dob ? new Date(data.dob).toISOString().split("T")[0] : "",
+        
           subscriptionPlan: data.subscription || "Basic",  // Mapped
           newsletter: data.newsLetter ?? true,             // Mapped
         }));
